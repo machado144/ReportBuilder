@@ -1,6 +1,7 @@
 require 'json'
 require 'builder'
 require 'base64'
+require 'pry'
 
 # Add except method to Hash
 class Hash
@@ -476,8 +477,8 @@ class ReportBuilder
       @builder.li do
         error = before['result']['error_message'].split("\n")
         @builder.span(style: "color:#{COLOR[:failed]}") do
-          error[0..-2].each do |line|
-            @builder << "<h3>#{line}</h3>" + '<br/>'
+          error[0].each do |line|
+            @builder << line + '<br/>'
           end
         end
         @builder << "<strong>Hook: </strong>#{error[-1]} <br/>"
@@ -494,6 +495,7 @@ class ReportBuilder
               @builder << line + '<br/>'
             end
           end
+          binding.pry
           @builder << "<strong>Hook: </strong>#{scenario['keyword'] == 'Scenario Outline' ? error[-7] : error[-4]} <br/>"
           @builder << "<strong>FF: </strong>#{error[-2]} <br/><hr/>"
         end
