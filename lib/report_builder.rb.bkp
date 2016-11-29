@@ -477,7 +477,7 @@ class ReportBuilder
         error = before['result']['error_message'].split("\n")
         @builder.span(style: "color:#{COLOR[:failed]}") do
           error[0..-2].each do |line|
-            @builder << "<h3>#{line}</h3>" + '<br/>'
+            @builder << line + '<br/>'
           end
         end
         @builder << "<strong>Hook: </strong>#{error[-1]} <br/>"
