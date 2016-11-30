@@ -508,7 +508,7 @@ class ReportBuilder
         end
         error = error.split("\n")
         @builder.span(style: "color:#{COLOR[:failed]}") do
-          error[0..-3].each do |line|
+          error.each do |line|
             @builder << '<h2>' + line + '</h2><br/>'
           end
         end
