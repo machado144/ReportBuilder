@@ -473,7 +473,6 @@ class ReportBuilder
 
   def self.build_error_list(scenario)
     #comment
-    binding.pry
     scenario['before'].each do |before|
       next unless before['status'] == 'failed'
       @builder.li do
@@ -503,14 +502,18 @@ class ReportBuilder
       end if step['after']
       next unless step['status'] == 'failed' && step['result']['error_message']
       @builder.li do
-        error = step['result']['error_message'].split("\n")
+        error = step['result']['error_message']
+        if error.include?("(RuntimeError)")
+          error.gsub!("(RuntimeError)", "\nSLICE_PART")
+          error = error.slice(0..(error.index("SLICE_PART") - 1))
+        end
+        error = error.split("\n")
         @builder.span(style: "color:#{COLOR[:failed]}") do
           error[0..-3].each do |line|
-            @builder << line + '<br/>'
+            @builder << '<h2>' + line + '</h2><br/>'
           end
         end
-        @builder << "<strong>SD: </strong>#{error[-2]} <br/>"
-        @builder << "<strong>FF: </strong>#{error[-1]} <br/><hr/>"
+        @builder << "<strong>Scenario: </strong>#{scenario['name']} <br/><hr/>"
       end
     end
     scenario['after'].each do |after|
