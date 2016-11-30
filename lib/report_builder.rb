@@ -472,16 +472,20 @@ class ReportBuilder
   end
 
   def self.build_error_list(scenario)
+    #comment
     scenario['before'].each do |before|
       next unless before['status'] == 'failed'
       @builder.li do
-        error = before['result']['error_message'].split("\n")
+        error = before['result']['error_message']
+        if error.include?("(RuntimeError)")
+          error.gsub!("(RuntimeError)", "\nSLICE_PART")
+          error = error.slice(0..(error.index("SLICE_PART") - 1))
+        end
         @builder.span(style: "color:#{COLOR[:failed]}") do
-          error[0].each do |line|
-            @builder << line + '<br/>'
+          error.each do |line|
+            @builder << '<h3>' + line + '</h3><br/>'
           end
         end
-        @builder << "<strong>Hook: </strong>#{error[-1]} <br/>"
         @builder << "<strong>Scenario: </strong>#{scenario['name']} <br/><hr/>"
       end
     end
@@ -508,8 +512,8 @@ class ReportBuilder
         end
         error = error.split("\n")
         @builder.span(style: "color:#{COLOR[:failed]}") do
-          error[0..-3].each do |line|
-            @builder << '<h2>' + line + '</h2><br/>'
+          error.each do |line|
+            @builder << '<h3>' + line + '</h3><br/>'
           end
         end
         @builder << "<strong>Scenario: </strong>#{scenario['name']} <br/><hr/>"
@@ -518,13 +522,17 @@ class ReportBuilder
     scenario['after'].each do |after|
       next unless after['status'] == 'failed'
       @builder.li do
-        error = after['result']['error_message'].split("\n")
+        error = after['result']['error_message']
+        if error.include?("(RuntimeError)")
+          error.gsub!("(RuntimeError)", "\nSLICE_PART")
+          error = error.slice(0..(error.index("SLICE_PART") - 1))
+        end
+        error = error.split("\n")
         @builder.span(style: "color:#{COLOR[:failed]}") do
-          error[0..-2].each do |line|
-            @builder << line + '<br/>'
+          error.each do |line|
+            @builder << '<h3>' + line + '</h3><br/>'
           end
         end
-        @builder << "<strong>Hook: </strong>#{error[-1]} <br/>"
         @builder << "<strong>Scenario: </strong>#{scenario['name']} <br/><hr/>"
       end
     end
