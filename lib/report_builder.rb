@@ -472,6 +472,8 @@ class ReportBuilder
   end
 
   def self.build_error_list(scenario)
+    #comment
+    binding.pry
     scenario['before'].each do |before|
       next unless before['status'] == 'failed'
       @builder.li do
@@ -495,7 +497,6 @@ class ReportBuilder
               @builder << line + '<br/>'
             end
           end
-          binding.pry
           @builder << "<strong>Hook: </strong>#{scenario['keyword'] == 'Scenario Outline' ? error[-7] : error[-4]} <br/>"
           @builder << "<strong>FF: </strong>#{error[-2]} <br/><hr/>"
         end
