@@ -476,7 +476,7 @@ class ReportBuilder
     scenario['before'].each do |before|
       next unless before['status'] == 'failed'
       @builder.li do
-        @builder << "<strong>Scenario: </strong>#{scenario['name']} <br/><hr/>"
+        @builder << "<strong>Scenario: </strong>#{scenario['name']} <br/>"
         error = before['result']['error_message']
         if error.include?("(RuntimeError)")
           error.gsub!("(RuntimeError)", "\nSLICE_PART")
@@ -487,6 +487,7 @@ class ReportBuilder
             @builder << '<h3>' + line + '</h3>'
           end
         end
+        @builder << "<hr/>"
       end
     end
     scenario['steps'].each do |step|
@@ -505,7 +506,7 @@ class ReportBuilder
       end if step['after']
       next unless step['status'] == 'failed' && step['result']['error_message']
       @builder.li do
-        @builder << "<strong>Scenario: </strong>#{scenario['name']} <br/><hr/>"
+        @builder << "<strong>Scenario: </strong>#{scenario['name']} <br/>"
         error = step['result']['error_message']
         if error.include?("(RuntimeError)")
           error.gsub!("(RuntimeError)", "\nSLICE_PART")
@@ -517,12 +518,13 @@ class ReportBuilder
             @builder << '<h3>' + line + '</h3>'
           end
         end
+        @builder << "<hr/>"
       end
     end
     scenario['after'].each do |after|
       next unless after['status'] == 'failed'
       @builder.li do
-        @builder << "<strong>Scenario: </strong>#{scenario['name']} <br/><hr/>"
+        @builder << "<strong>Scenario: </strong>#{scenario['name']} <br/>"
         error = after['result']['error_message']
         if error.include?("(RuntimeError)")
           error.gsub!("(RuntimeError)", "\nSLICE_PART")
@@ -534,6 +536,7 @@ class ReportBuilder
             @builder << '<h3>' + line + '</h3>'
           end
         end
+        @builder << "<hr/>"
       end
     end
   end
